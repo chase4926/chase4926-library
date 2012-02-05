@@ -1,12 +1,38 @@
 
 require 'yaml'
 
-
 #
 # Returns true if the directory exists (convenience method)
 #
 def directory_exists?(directory)
   File.directory? directory
+end
+
+
+#
+# Does a recursive search of a directory
+#
+def recursive_search_directory(directory, path_so_far=nil)
+  result = []
+  search_directory(directory).each do |path|
+    if directory_exists?(path) then
+      if path_so_far == nil then
+        next_path_so_far = path.split('/').last
+      else
+        next_path_so_far = "#{path_so_far}/#{path.split('/').last}"
+      end
+      recursive_search_directory(path, next_path_so_far).each do |n|
+        result << n
+      end
+    else
+      if path_so_far == nil then
+        result << path.split('/').last
+      else
+        result << "#{path_so_far}/#{path.split('/').last}"
+      end
+    end
+  end
+  return result
 end
 
 
