@@ -118,10 +118,10 @@ end
 # Returns the contents of an entire file read into a string
 #
 def file_read(file)
-  vputs "Reading file " + file
-  if ! File.exists?(file) then
-    vputs "That file doesn't exist: "  + file.inspect
-    return ""
+  vputs "Reading file #{file}"
+  if not File.exists?(file) then
+    vputs "That file doesn't exist: #{file.inspect}"
+    return ''
   end
   f = File.open(file, 'r')
     string = f.read
@@ -134,7 +134,7 @@ end
 # Returns the contents of a yaml file
 #
 def yamlfileread(file)
-  if ! File.exists?(file) then
+  if not File.exists?(file) then
     vputs "That file doesn't exist: #{file.inspect}"
     return ''
   end
@@ -146,7 +146,7 @@ end
 # Creates a file with filename file, and fills it with file_contents
 #
 def create_file(file, file_contents)
-  vputs "Creating file: " + file
+  vputs "Creating file: #{file}"
   begin
     File.open(file, 'w+') do |f|  # open file for update
       f.print file_contents       # write file_contents to the file
@@ -164,11 +164,8 @@ def smoother(number, target_number, rate)
   if (number - target_number).abs > rate then
     if number < target_number then
       return (number + rate)
-    elsif number > target_number then
+    else # number > target_number
       return (number - rate)
-    else
-      vputs "Error in method: smoother"
-      return 0
     end
   else
     return target_number
