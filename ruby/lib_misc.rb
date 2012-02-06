@@ -9,13 +9,14 @@ def directory_exists?(directory)
 end
 
 
+=begin
 #
 # Does a recursive search of a directory
 #
-def recursive_search_directory(directory, path_so_far=nil)
+def old_recursive_search_directory(directory, path_so_far=nil)
   result = []
   search_directory(directory).each do |path|
-    if directory_exists?(path) then
+    if File.directory?(path) then
       if path_so_far == nil then
         next_path_so_far = path.split('/').last
       else
@@ -32,6 +33,20 @@ def recursive_search_directory(directory, path_so_far=nil)
       end
     end
   end
+  return result
+end
+=end
+
+
+#
+# Does a recursive search of a directory
+#
+def recursive_search_directory(directory, path_so_far=nil)
+  result = Dir.glob(File.join(directory, '**/*'))
+  result.each_index do |i|
+    result[i] = nil if File.directory?(result[i])
+  end
+  result.compact!
   return result
 end
 
