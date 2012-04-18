@@ -6,7 +6,7 @@ module Alphabet
   end
   
   def self.letter_to_index(letter)
-    index = letter.upcase().ord() - 33
+    index = letter.ord() - 33
     if index == -1 then
       index = 1000
     elsif index < 0 or index > 93
@@ -57,7 +57,7 @@ require 'rubygems'
 require 'gosu'
 include Gosu
 
-$TEXT = "You\nYou shall\nYou shall not\nYou shall not pass!\n#396 Ready for processing...\n$13.37 for that telepad."
+$TEXT = "You\nYou shall\nYou shall not\nYou shall not pass!\n#396 Ready for processing...\n$13.37 for that telepad.\n(**)@ (x,y) <x,y> {x,y}\n5 > 3 | 3 < 5"
 $SCALE = 3
 
 
