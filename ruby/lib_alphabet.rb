@@ -1,35 +1,41 @@
 
 
 module Alphabet
-  class Text
-    def initialize(window, message, scale=1)
-      @image = record_image(window, message, scale)
+  def self.new_text(window, message, scale=1)
+    return Alphabet::record_image(window, message, scale)
+  end
+  
+  def self.letter_to_index(letter)
+    index = letter.upcase().ord() - 65
+    if index == -33 then
+      index = 27
+    elsif index < 0 or index > 25
+      index = 26
     end
-    
-    def letter_to_index(letter)
-      index = letter.upcase().ord() - 65
-      if index == -33 then
-        index = 27
-      elsif index < 0 or index > 25
-        index = 26
+    return index
+  end
+  
+  def self.record_image(window, message, scale)
+    message_array = [[]]
+    y = 0
+    message.each_char do |letter|
+      if letter == "\n" then
+        y += 1
+        message_array[y] = []
+      else
+        message_array[y] << Alphabet::get_alphabet()[Alphabet::letter_to_index(letter)]
       end
-      return index
     end
-    
-    def record_image(window, message, scale)
-      message_array = []
-      message.each_char do |letter|
-        message_array << Alphabet.get_alphabet()[letter_to_index(letter)]
-      end
-      return window.record(message_array.count * (6 * scale), 7 * scale) do
-        message_array.each_index do |i|
-          message_array[i].draw(i * (6 * scale), 0, 0, scale, scale)
+    max_width = 0
+    message_array.each do |line|
+      max_width = line.count if line.count > max_width
+    end
+    return window.record((max_width * 6) * scale, (8 * message_array.count) * scale) do
+      message_array.each_index do |y|
+        message_array[y].each_index do |i|
+          message_array[y][i].draw(i * (6 * scale), (y * 8) * scale, 0, scale, scale)
         end
       end
-    end
-    
-    def draw(x, y, z)
-      @image.draw(x, y, z)
     end
   end
   
@@ -51,22 +57,23 @@ require 'rubygems'
 require 'gosu'
 include Gosu
 
+$TEXT = "You\nshall\nnot\npass"
+$SCALE = 3
+
 
 class GameWindow < Gosu::Window
   def initialize()
     super(640, 640, false)
     self.caption = 'Alpha Test'
-    Alphabet.initialize(self)
-    @text1 = Alphabet::Text.new(self, 'Press any key to continue.', 4)
+    Alphabet::initialize(self)
+    @text1 = Alphabet::new_text(self, $TEXT, $SCALE)
   end # End GameWindow Initialize
   
   def update()
   end # End GameWindow Update
   
   def draw()
-    clip_to(0,0,640,640) do
-      @text1.draw(0,0,0)
-    end
+    @text1.draw(32,32,0)
   end # End GameWindow Draw
   
   def button_down(id)
