@@ -6,11 +6,11 @@ module Alphabet
   end
   
   def self.letter_to_index(letter)
-    index = letter.upcase().ord() - 65
-    if index == -33 then
-      index = 27
-    elsif index < 0 or index > 25
-      index = 26
+    index = letter.upcase().ord() - 33
+    if index == -1 then
+      index = 1000
+    elsif index < 0 or index > 93
+      index = 93
     end
     return index
   end
@@ -33,7 +33,7 @@ module Alphabet
     return window.record((max_width * 6) * scale, (8 * message_array.count) * scale) do
       message_array.each_index do |y|
         message_array[y].each_index do |i|
-          message_array[y][i].draw(i * (6 * scale), (y * 8) * scale, 0, scale, scale)
+          message_array[y][i].draw(i * (6 * scale), (y * 8) * scale, 0, scale, scale) unless message_array[y][i] == nil
         end
       end
     end
@@ -57,7 +57,7 @@ require 'rubygems'
 require 'gosu'
 include Gosu
 
-$TEXT = "You\nshall\nnot\npass"
+$TEXT = "You\nYou shall\nYou shall not\nYou shall not pass!\n#396 Ready for processing...\n$13.37 for that telepad."
 $SCALE = 3
 
 
