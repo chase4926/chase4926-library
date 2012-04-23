@@ -170,6 +170,25 @@ def create_file(file, file_contents)
   end
 end
 
+#
+# Returns whether or not a given angle is between min_angle and max_angle
+#
+def angle_in_range?(angle, min_angle, max_angle)
+  angle %= 360#=#
+  min_angle %= 360#=#
+  max_angle %= 360#=#
+  if angle < 180 then
+    angle += 360
+  end
+  if min_angle < 180 then
+    min_angle += 360
+  end
+  if max_angle < 180 then
+    max_angle += 360
+  end
+  return (angle >= min_angle) && (angle <= max_angle)
+end
+
 
 #
 # Returns a number from number as close to target_number as rate will allow
