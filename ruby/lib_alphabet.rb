@@ -39,9 +39,19 @@ module Alphabet
     end
   end
   
+  def self.draw_text(text, x, y, scale)
+    i = 0
+    text.gsub!("\n", '\n')
+    text.each_char do |letter|
+      letter_image = Alphabet::get_alphabet()[Alphabet::letter_to_index(letter)]
+      letter_image.draw(x + (i * (6 * scale)), y, 0, scale, scale) unless letter_image == nil
+      i += 1
+    end
+  end
+  
   def self.initialize(window)
     Gosu::enable_undocumented_retrofication()
-    @@alphabet_tilesheet = Gosu::Image::load_tiles(window, 'alphabet.png', 5, 7, false)
+    @@alphabet_tilesheet = Gosu::Image::load_tiles(window, "#{File.dirname(__FILE__)}/alphabet.png", 5, 7, false)
   end
   
   def self.get_alphabet()
@@ -73,7 +83,11 @@ class GameWindow < Gosu::Window
   end # End GameWindow Update
   
   def draw()
-    @text1.draw(32,32,0)
+    #@text1.draw(32,32,0)
+    #14.times do |i|
+      # No lag, at least on home desktop computer
+      #Alphabet::draw_text("Hello World!\n", 32, i * 32, 3)
+    #end
   end # End GameWindow Draw
   
   def button_down(id)
