@@ -46,8 +46,7 @@ def recursive_search_directory(directory, path_so_far=nil)
   result.each_index do |i|
     result[i] = nil if File.directory?(result[i])
   end
-  result.compact!
-  return result
+  return result.compact()
 end
 
 
