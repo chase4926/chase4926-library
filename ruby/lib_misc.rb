@@ -239,6 +239,24 @@ def angle_smoother(angle, target_angle, rate)
 end
 
 
+def get_number_range(first_number, second_number)
+  first_number = first_number.round()
+  second_number = second_number.round()
+  numbers_hash = Hash.new()
+  numbers_hash[first_number] = true
+  numbers_hash[second_number] = true
+  return [first_number] if numbers_hash.count() == 1
+  min, max = numbers_hash.keys().sort()
+  element_count = (max - min) + 1
+  count = min
+  until numbers_hash.count() == element_count
+    count += 1
+    numbers_hash[count] = true
+  end
+  return numbers_hash.keys().sort()
+end
+
+
 #
 # Used for line of sight, not made by me
 #
