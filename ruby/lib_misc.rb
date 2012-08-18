@@ -1,6 +1,28 @@
 
 require 'yaml'
 
+
+module EveryModule
+  @@record_calls = Hash.new()
+  
+  def every(amount_of_calls, &block)
+    source_location = block.source_location
+    # Assign the source location to a block, and amount of calls if it isn't already assigned
+    if @@record_calls[source_location] == nil then
+      @@record_calls[source_location] = [amount_of_calls, 0]
+    end
+    # Increment the counter
+    @@record_calls[source_location][1] += 1
+    # Check if the counter is equal to the max
+    if @@record_calls[source_location][0] == @@record_calls[source_location][1] then
+      # It is, so reset and call block
+      @@record_calls[source_location][1] = 0
+      block.call()
+    end
+  end
+end
+
+
 #
 # Returns true if the directory exists (convenience method)
 #
