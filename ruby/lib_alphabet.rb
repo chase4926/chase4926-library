@@ -45,7 +45,7 @@ module Alphabet
     text.gsub!("\n", '\n')
     text.each_char do |letter|
       letter_image = Alphabet::get_alphabet()[Alphabet::letter_to_index(letter)]
-      letter_image.draw(x + (i * (6 * scale)), y, 0, scale, scale) unless letter_image == nil
+      letter_image.draw(x + (i * (6 * scale)), y, z, scale, scale) unless letter_image == nil
       i += 1
     end
   end
