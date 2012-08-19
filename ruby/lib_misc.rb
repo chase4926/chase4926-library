@@ -23,6 +23,20 @@ module EveryModule
 end
 
 
+def remove_trailing_nils(array)
+  compact_array = array.compact()
+  count = 0
+  match_count = 0
+  while match_count < compact_array.count() do
+    if array[count] == compact_array[match_count] then
+      match_count += 1
+    end
+    count += 1
+  end
+  return array[0..(count-1)]
+end
+
+
 #
 # Returns true if the directory exists (convenience method)
 #
