@@ -40,6 +40,7 @@ module Alphabet
   end
   
   def self.draw_text(text, x, y, z, scale)
+    text = text.to_s()
     i = 0
     text.gsub!("\n", '\n')
     text.each_char do |letter|
