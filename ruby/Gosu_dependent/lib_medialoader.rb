@@ -1,6 +1,6 @@
 
 
-def recursive_search_directory(directory, path_so_far=nil)
+def recursive_search_directory(directory)
   result = Dir.glob(File.join(directory, '**/*'))
   result.each_index do |i|
     result[i] = nil if File.directory?(result[i])
@@ -12,6 +12,7 @@ end
 module Media
   @@images_hash = {}
   @@sounds_hash = {}
+  @@tilesets_hash = {}
   
   def self.get_sound(key)
     return @@sounds_hash[key]
@@ -19,6 +20,20 @@ module Media
   
   def self.get_image(key)
     return @@images_hash[key]
+  end
+  
+  def self.get_tileset(key)
+    return @@tilesets_hash[key]
+  end
+  
+  def self.get_tileset_list(start_of_key='')
+    result = []
+    @@tilesets_hash.each_key do |key|
+      if key.start_with?(start_of_key)
+        result << key
+      end
+    end
+    return result
   end
   
   def self.load_images(window, path)
@@ -34,7 +49,7 @@ module Media
     if File.directory?(samples_folder) then
       # Load samples
       recursive_search_directory(samples_folder).each do |sample_path|
-        @@sounds_hash[sample_path.split('/', 3)[2]] = Sample.new(window, sample_path)
+        @@sounds_hash[sample_path.split(File.join(path,''), 2)[1]] = Sample.new(window, sample_path)
       end
     elsif $VERBOSE then
       puts "'#{samples_folder}' directory not found, no samples were loaded"
@@ -43,28 +58,44 @@ module Media
     if File.directory?(songs_folder) then
       # Load songs
       recursive_search_directory(songs_folder).each do |song_path|
-        @@sounds_hash[song_path.split('/', 3)[2]] = Song.new(window, song_path)
+        @@sounds_hash[song_path.split(File.join(path,''), 2)[1]] = Song.new(window, song_path)
       end
     elsif $VERBOSE then
       puts "'#{songs_folder}' directory not found, no songs were loaded"
     end
   end
   
-  def self.initialize(window, images_directory, sounds_directory)
-    images_path = File.join(File.dirname(__FILE__), images_directory)
-    sounds_path = File.join(File.dirname(__FILE__), sounds_directory)
-    
-    if File.directory?(images_path) then
+  def self.load_tilesets(window, path)
+    search_directory(path).each do |folder|
+      size = folder.split('/').last().split('x', 2)
+      size[0] = size[0].to_i()
+      size[1] = size[1].to_i()
+      if size[0] > 0 and size[1] > 0 then
+        recursive_search_directory(folder).each do |tileset_path|
+          @@tilesets_hash[tileset_path.split(File.join(path,''), 2)[1]] = Gosu::Image.load_tiles(window, tileset_path, size[0], size[1], true)
+        end
+      end
+    end
+  end
+  
+  def self.initialize(window, images_directory, sounds_directory, tilesets_directory)
+    if File.directory?(images_directory) then
       # Load images
-      self.load_images(window, images_path)
+      self.load_images(window, images_directory)
     elsif $VERBOSE then
       puts "'#{images_directory}' directory not found, images were not loaded!"
     end
-    if File.directory?(sounds_path) then
+    if File.directory?(sounds_directory) then
       # Load sounds
-      self.load_sounds(window, sounds_path)
+      self.load_sounds(window, sounds_directory)
     elsif $VERBOSE then
       puts "'#{sounds_directory}' directory not found, sounds were not loaded!"
+    end
+    if File.directory?(tilesets_directory) then
+      # Load tilesets
+      self.load_tilesets(window, tilesets_directory)
+    elsif $VERBOSE then
+      puts "'#{tilesets_directory}' directory not found, tilesets were not loaded!"
     end
   end
 end
