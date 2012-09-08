@@ -77,7 +77,7 @@ end
 #
 # Does a recursive search of a directory
 #
-def recursive_search_directory(directory, path_so_far=nil)
+def recursive_search_directory(directory)
   result = Dir.glob(File.join(directory, '**/*'))
   result.each_index do |i|
     result[i] = nil if File.directory?(result[i])
