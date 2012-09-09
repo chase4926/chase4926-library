@@ -23,7 +23,7 @@ module Alphabet
         y += 1
         message_array[y] = []
       else
-        message_array[y] << Alphabet::get_alphabet()[Alphabet::letter_to_index(letter)]
+        message_array[y] << @@alphabet_tilesheet[Alphabet::letter_to_index(letter)]
       end
     end
     max_width = 0
