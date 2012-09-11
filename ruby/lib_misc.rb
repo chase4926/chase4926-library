@@ -294,7 +294,47 @@ end
 
 
 #
-# Used for line of sight, not made by me
+# Determines whether or not two bounding boxes intersect
+#
+def bounding_box_test(b1_x, b1_y, b1_w, b1_h, b2_x, b2_y, b2_w, b2_h)
+  # b1_x = box1_x , b1_w = box1_width , b1_h = box1_height , and so on...
+  if b1_x > (b2_x + b2_w) - 1 or
+     b1_y > (b2_y + b2_h) - 1 or
+     b2_x > (b1_x + b1_w) - 1 or
+     b2_y > (b1_y + b1_h) - 1 then
+    return false
+  else
+    return true
+  end
+end
+
+
+#
+# Finds the intersection of two lines, if there is none, returns nil
+#
+def get_line_intersection(x1, y1, x2, y2, x3, y3, x4, y4)
+  a1 = y2 - y1
+  b1 = x1 - x2
+  c1 = (a1 * x1) + (b1 * y1)
+  
+  a2 = y4 - y3
+  b2 = x3 - x4
+  c2 = (a2 * x3) + (b2 * y3)
+  
+  det = (a1 * b2) - (a2 * b1)
+  
+  if det == 0 then
+    # no intersection
+    return nil
+  else
+    # returns [x,y] of intersection
+    return (((b2 * c1) - (b1 * c2)) / det), (((a1 * c2) - (a2 * c1)) / det)
+  end
+end
+
+
+#
+# Used for line of sight, found online
 #
 def get_line(x0,y0,x1,y1)
   points = []
