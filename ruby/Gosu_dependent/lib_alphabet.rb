@@ -17,13 +17,13 @@ module Alphabet
   
   def self.record_image(window, message, scale)
     message_array = [[]]
-    y = 0
+    message_y = 0
     message.each_char do |letter|
       if letter == "\n" then
-        y += 1
-        message_array[y] = []
+        message_y += 1
+        message_array[message_y] = []
       else
-        message_array[y] << @@alphabet_tilesheet[Alphabet::letter_to_index(letter)]
+        message_array[message_y] << @@alphabet_tilesheet[Alphabet::letter_to_index(letter)]
       end
     end
     max_width = 0
