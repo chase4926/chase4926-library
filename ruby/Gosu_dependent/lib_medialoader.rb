@@ -1,14 +1,5 @@
 
 
-def recursive_search_directory(directory)
-  result = Dir.glob(File.join(directory, '**/*'))
-  result.each_index do |i|
-    result[i] = nil if File.directory?(result[i])
-  end
-  return result.compact()
-end
-
-
 module Media
   @@images_hash = {}
   @@sounds_hash = {}
@@ -26,6 +17,16 @@ module Media
     return @@tilesets_hash[key]
   end
   
+  def self.get_graphic(key)
+    image = self.get_image(key)
+    tileset = self.get_tileset(key)
+    if image then
+      return [image]
+    elsif tileset then
+      return tileset
+    end
+  end
+  
   def self.get_tileset_list(start_of_key='')
     result = []
     @@tilesets_hash.each_key do |key|
@@ -38,7 +39,9 @@ module Media
   
   def self.load_images(window, path)
     recursive_search_directory(path).each do |image_path|
-      @@images_hash[image_path.split(File.join(path,''), 2)[1]] = Image.new(window, image_path, true)
+      if image_path.split('.').last() == 'png' then
+        @@images_hash[image_path.split(File.join(path,''), 2)[1]] = Image.new(window, image_path, true)
+      end
     end
   end
   

@@ -23,6 +23,15 @@ module EveryModule
 end
 
 
+def inverse_bool(bool)
+  if bool then
+    return false
+  else
+    return true
+  end
+end
+
+
 def remove_trailing_nils(array)
   compact_array = array.compact()
   count = 0
@@ -311,6 +320,7 @@ end
 
 #
 # Finds the intersection of two lines, if there is none, returns nil
+# Translated from some other language, can't remember
 #
 def get_line_intersection(x1, y1, x2, y2, x3, y3, x4, y4)
   a1 = y2 - y1

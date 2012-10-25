@@ -39,13 +39,13 @@ module Alphabet
     end
   end
   
-  def self.draw_text(text, x, y, z, scale)
+  def self.draw_text(text, x, y, z, scale, color = 0xFFFFFFFF)
     text = text.to_s()
     i = 0
     text.gsub!("\n", '\n')
     text.each_char do |letter|
       letter_image = Alphabet::get_alphabet()[Alphabet::letter_to_index(letter)]
-      letter_image.draw(x + (i * (6 * scale)), y, z, scale, scale) unless letter_image == nil
+      letter_image.draw(x + (i * (6 * scale)), y, z, scale, scale, color) unless letter_image == nil
       i += 1
     end
   end
