@@ -33,16 +33,11 @@ end
 
 
 def remove_trailing_nils(array)
-  compact_array = array.compact()
-  count = 0
-  match_count = 0
-  while match_count < compact_array.count() do
-    if array[count] == compact_array[match_count] then
-      match_count += 1
-    end
-    count += 1
+  array.reverse!()
+  while array[0] == nil do
+    array.delete_at(0)
   end
-  return array[0..(count-1)]
+  return array.reverse()
 end
 
 
@@ -50,37 +45,8 @@ end
 # Returns true if the directory exists (convenience method)
 #
 def directory_exists?(directory)
-  File.directory? directory
+  return File.directory?(directory)
 end
-
-
-=begin
-#
-# Does a recursive search of a directory
-#
-def old_recursive_search_directory(directory, path_so_far=nil)
-  result = []
-  search_directory(directory).each do |path|
-    if File.directory?(path) then
-      if path_so_far == nil then
-        next_path_so_far = path.split('/').last
-      else
-        next_path_so_far = "#{path_so_far}/#{path.split('/').last}"
-      end
-      recursive_search_directory(path, next_path_so_far).each do |n|
-        result << n
-      end
-    else
-      if path_so_far == nil then
-        result << path.split('/').last
-      else
-        result << "#{path_so_far}/#{path.split('/').last}"
-      end
-    end
-  end
-  return result
-end
-=end
 
 
 #
@@ -98,13 +64,13 @@ end
 #
 # Does a block of code verbosely regardless of the state of the $VERBOSE variable
 #
-def verbosely()
+def verbosely(bool=true)
   if $VERBOSE == true then
     reset = true
   else
     reset = false
   end
-  $VERBOSE = true
+  $VERBOSE = bool
   yield
   $VERBOSE = reset
 end
@@ -114,14 +80,9 @@ end
 # Does a block of code non-verbosely regardless of the state of the $VERBOSE variable
 #
 def non_verbosely()
-  if $VERBOSE == true then
-    reset = true
-  else
-    reset = false
+  verbosely(false) do
+    yield
   end
-  $VERBOSE = false
-  yield
-  $VERBOSE = reset
 end
 
 
@@ -131,7 +92,7 @@ end
 def fib(start_number, n)
   curr = start_number
   succ = start_number
-  n.times do
+  n.times() do
     curr, succ = succ, curr + succ
   end
   return curr
@@ -157,9 +118,9 @@ end
 #
 # Returns a random number between min and max
 #
-def random(min, max)
-  srand()
-  return (min..max).to_a.sort_by{rand}.pop
+def random(min, max, seed=nil)
+  srand(seed) if seed
+  return (min..max).to_a().sample()
 end
 
 
@@ -167,9 +128,7 @@ end
 # Returns a random floating point integer between min and max
 #
 def randomfloat(min, max, seed=nil) # Why do I need this?
-  a = random(min, max, seed)
-  a = a.to_f / 10.to_f
-  return a
+  return random(min, max, seed) / 10.0
 end
 
 
@@ -284,21 +243,12 @@ def angle_smoother(angle, target_angle, rate)
 end
 
 
+#
+# Returns an array of numbers between the min and max of two inputs
+#
 def get_number_range(first_number, second_number)
-  first_number = first_number.round()
-  second_number = second_number.round()
-  numbers_hash = Hash.new()
-  numbers_hash[first_number] = true
-  numbers_hash[second_number] = true
-  return [first_number] if numbers_hash.count() == 1
-  min, max = numbers_hash.keys().sort()
-  element_count = (max - min) + 1
-  count = min
-  until numbers_hash.count() == element_count
-    count += 1
-    numbers_hash[count] = true
-  end
-  return numbers_hash.keys().sort()
+  min_max = [first_number, second_number].sort()
+  return (min_max[0]..min_max[1]).to_a()
 end
 
 
@@ -383,4 +333,7 @@ def get_line(x0,y0,x1,y1)
 end
 
 
-__END__
+if __FILE__ == $0 then
+  puts 'Debug script running'
+  
+end
