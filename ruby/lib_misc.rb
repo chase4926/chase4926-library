@@ -1,6 +1,4 @@
 
-require 'yaml'
-
 
 module EveryModule
   @@record_calls = Hash.new()
@@ -148,15 +146,21 @@ def file_read(file)
 end
 
 
-#
-# Returns the contents of a yaml file
-#
-def yamlfileread(file)
-  if not File.exists?(file) then
-    vputs "That file doesn't exist: #{file.inspect}"
-    return ''
+if defined?(YAML) then
+  #
+  # Returns the contents of a yaml file
+  #
+  def yamlfileread(file)
+    if not File.exists?(file) then
+      puts "That file doesn't exist: #{file.inspect}" if $VERBOSE
+      return ''
+    end
+    return YAML::load( File.open(file, 'r') )
   end
-  return YAML::load( File.open(file, 'r') )
+else
+  def yamlfileread(file)
+    puts 'YAML isn\'t loaded!' if $VERBOSE
+  end
 end
 
 
