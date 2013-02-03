@@ -40,7 +40,7 @@ module Media
   def self.load_images(window, path)
     recursive_search_directory(path).each do |image_path|
       if image_path.split('.').last() == 'png' then
-        @@images_hash[image_path.split(File.join(path,''), 2)[1]] = Image.new(window, image_path, true)
+        @@images_hash[image_path.split(File.join(path,''), 2)[1]] = Gosu::Image.new(window, image_path, true)
       end
     end
   end
@@ -52,7 +52,7 @@ module Media
     if File.directory?(samples_folder) then
       # Load samples
       recursive_search_directory(samples_folder).each do |sample_path|
-        @@sounds_hash[sample_path.split(File.join(path,''), 2)[1]] = Sample.new(window, sample_path)
+        @@sounds_hash[sample_path.split(File.join(path,''), 2)[1]] = Gosu::Sample.new(window, sample_path)
       end
     elsif $VERBOSE then
       puts "'#{samples_folder}' directory not found, no samples were loaded"
@@ -61,7 +61,7 @@ module Media
     if File.directory?(songs_folder) then
       # Load songs
       recursive_search_directory(songs_folder).each do |song_path|
-        @@sounds_hash[song_path.split(File.join(path,''), 2)[1]] = Song.new(window, song_path)
+        @@sounds_hash[song_path.split(File.join(path,''), 2)[1]] = Gosu::Song.new(window, song_path)
       end
     elsif $VERBOSE then
       puts "'#{songs_folder}' directory not found, no songs were loaded"
