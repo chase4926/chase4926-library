@@ -337,6 +337,53 @@ def get_line(x0,y0,x1,y1)
 end
 
 
+class BoundingBox
+  attr_accessor :x, :y, :width, :height
+  
+  def initialize(x, y, width, height)
+    @x = x
+    @y = y
+    @width = width
+    @height = height
+  end
+  
+  def hit_test(x, y, width=1, height=1)
+    return bounding_box_test(@x, @y, @width, @height, x, y, width, height)
+  end
+  
+  def hit_test_box(box)
+    return bounding_box_test(@x, @y, @width, @height, box.x, box.y, box.width, box.height)
+  end
+end
+
+
+class BoundingBoxManager
+  def initialize()
+    @bounding_box_hash = Hash.new()
+  end
+  
+  def hit_test_boxes(x, y, width=1, height=1)
+    result = Array.new()
+    @bounding_box_hash.each do |key, value|
+      result << key if value.hit_test(x, y, width, height)
+    end
+    return result
+  end
+  
+  def register_box(x, y, width, height, id)
+    @bounding_box_hash[id] = BoundingBox.new(x, y, width, height)
+  end
+  
+  def remove_box(id)
+    @bounding_box_hash.delete(id)
+  end
+  
+  def [](id)
+    return @bounding_box_hash[id]
+  end
+end
+
+
 if __FILE__ == $0 then
   puts 'Debug script running'
   
