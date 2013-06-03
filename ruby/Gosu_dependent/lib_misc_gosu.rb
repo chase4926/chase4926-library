@@ -36,20 +36,12 @@ module WindowSettings
     return (y - @@y_offset) / @@scale_y
   end
   
-  def self.initialize(window, width, height)
+  def self.initialize(window, width, height, default_width, default_height)
     @@window = window
-    if width > height then
-      @@scale_y = height / 640.0
-      @@scale_x = @@scale_y
-    elsif height > width then
-      @@scale_x = width / 640.0
-      @@scale_y = @@scale_x
-    else
-      @@scale_x = width / 640.0
-      @@scale_y = height / 640.0
-    end
-    @@x_offset = (width - (@@scale_x * 640)) / 2
-    @@y_offset = (height - (@@scale_y * 640)) / 2
+    @@scale_x = width / default_width.to_f()
+    @@scale_y = height / default_height.to_f()
+    @@x_offset = (width - (@@scale_x * default_width)) / 2
+    @@y_offset = (height - (@@scale_y * default_height)) / 2
   end
   
   def self.formatted_draw(&block)
