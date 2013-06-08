@@ -1,6 +1,4 @@
 
-require 'yaml'
-
 
 #
 # This method puts the messages to the console unless the constant $VERBOSE == false
