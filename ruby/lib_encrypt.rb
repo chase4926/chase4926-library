@@ -16,6 +16,43 @@ require 'openssl'
 require 'yaml'
 
 
+module OneTimePad
+  def self.convert_to_only_letters(string)
+    result = Array.new()
+    string.each_char() do |char|
+      if char.ord() >= 97 and char.ord() <= 122 then
+        result << (char.ord() - 32).chr()
+      elsif char.ord() >= 65 and char.ord() <= 90 then
+        result << char
+      end
+    end
+    return result.join()
+  end
+  
+  def self.crypt(mode, message, key)
+    mult = 0
+    if mode == :en then
+      mult = 1
+    elsif mode == :de then
+      mult = -1
+    else
+      raise 'Invalid mode! Valid modes are :en, :de'
+    end
+    message = convert_to_only_letters(message)
+    key = convert_to_only_letters(key)
+    if message.length() == key.length() then
+      result = Array.new()
+      message.each_char() do |char|
+        result << ((((char.ord() - 65) + (mult * (key[result.count()].ord() - 65))) % 26) + 65).chr()
+      end
+      return result.join()
+    else
+      raise 'Key length differs from message length!'
+    end
+  end
+end
+
+
 module Blowfish
   def self.cipher(mode, key, data)
     begin
