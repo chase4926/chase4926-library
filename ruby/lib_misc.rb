@@ -21,12 +21,8 @@ module EveryModule
 end
 
 
-def inverse_bool(bool)
-  if bool then
-    return false
-  else
-    return true
-  end
+def inverse_bool(bool) # Why did I ever need this?
+  return !bool
 end
 
 

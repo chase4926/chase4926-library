@@ -1,15 +1,5 @@
 =begin
-  Most of this comes from Phil Toland
-  Only the last method is mine.
-  
-  Example of use:
-  #b = [1,2,3]
-  #a = crypt('en', 'pass', b)
-  #a = crypt('de', 'pass', a)
-  
-  Secure crypt use:
-  a = secure_crypt('en', 'This string will be encrypted', 'static_pass')
-  a = secure_crypt('de', a, 'static_pass')
+  Blowfish module is from Phil Toland
 =end
 
 require 'openssl'
@@ -30,13 +20,11 @@ module OneTimePad
   end
   
   def self.crypt(mode, message, key)
-    mult = 0
-    if mode == :en then
-      mult = 1
-    elsif mode == :de then
-      mult = -1
-    else
-      raise 'Invalid mode! Valid modes are :en, :de'
+    mult = case mode
+      when :en then 1
+      when :de then -1
+      else
+        raise 'Invalid mode! Valid modes are :en, :de'
     end
     message = convert_to_only_letters(message)
     key = convert_to_only_letters(key)
@@ -74,10 +62,10 @@ end
 
 def crypt(mode, key, data)
   case mode
-    when 'en'
+    when :en
       data = data.to_yaml
       return Blowfish.encrypt(key, data)
-    when 'de'
+    when :de
       data = Blowfish.decrypt(key, data)
       if data != nil then
         return YAML::load(data)

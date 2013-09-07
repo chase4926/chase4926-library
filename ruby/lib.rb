@@ -5,7 +5,7 @@
 #
 def vputs(string)
   # I don't explicitly say == true so as to allow values other than true/false.
-  if $VERBOSE == true || $VERBOSE == nil then puts string end
+  puts(string) if $VERBOSE == true || $VERBOSE == nil
 end
 
 
