@@ -267,6 +267,13 @@ def bounding_box_test(b1_x, b1_y, b1_w, b1_h, b2_x, b2_y, b2_w, b2_h)
   end
 end
 
+#
+# Distance formula
+#
+def distance(x1, y1, x2, y2)
+  return Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2))
+end
+
 
 #
 # Finds the intersection of two lines, if there is none, returns nil
