@@ -36,7 +36,7 @@ def getRandomGradient(length, minimum, maximum):
 def getRandomColor():
   return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-def get_new_resolution(window_width, window_height, default_width, default_height, keep_aspect=True, scale=True):
+def get_new_resolution(window_width, window_height, default_width, default_height, scale=True, keep_aspect=True):
   # Input: window_width, window_height = Width & Height of the window
   #        default_width, default_height = Width & Height of the program
   #        keep_aspect = Whether or not to keep the aspect ratio when scaling
@@ -49,10 +49,10 @@ def get_new_resolution(window_width, window_height, default_width, default_heigh
       p_height = (default_height * window_width) / default_width
       if p_width <= window_width:
         # We'll use (p_width, window_height)
-        return (p_width, window_height)
+        return (int(p_width), window_height)
       else:
         # We'll use (window_width, p_height)
-        return (window_width, p_height)
+        return (window_width, int(p_height))
     else:
       # Scaling but not keeping the aspect ratio so use the window width & height
       # Note: This option usually looks the worst
